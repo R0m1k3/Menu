@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { MenuButton } from '@/components/MenuButton';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const configured = await isConfigured();
 

@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { GlassCard } from '@/components/GlassCard';
 import { Trash2, LogOut, PlusCircle, Globe } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPage() {
   const auth = await isAuthenticated();
 
