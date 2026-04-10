@@ -1,18 +1,15 @@
 # Stage 1: Build
-FROM node:20-bookworm-slim AS builder
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /app
 
-# Install build dependencies for better-sqlite3 and bcrypt
+# Install build dependencies
 RUN apt-get update && apt-get install -y \
     python3 \
     make \
     g++ \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
-
-# Set a dummy database URL for build time
-ENV DATABASE_URL="file:./build.db"
 
 COPY package*.json ./
 COPY prisma ./prisma/
@@ -25,19 +22,21 @@ COPY . .
 RUN npx prisma generate
 
 # Build Next.js app
+ENV DATABASE_URL="file:./build.db"
 RUN npm run build
 
 # Stage 2: Runner
-FROM node:20-bookworm-slim AS runner
+FROM node:22-bookworm-slim AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install runtime dependencies for SQLite
+# Install runtime dependencies
 RUN apt-get update && apt-get install -y \
     openssl \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy standalone build and static files
@@ -45,6 +44,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+
+# Ensure prisma directory is accessible and writable for SQLite
+RUN mkdir -p /app/prisma && chmod -R 777 /app/prisma
 
 # Expose port
 EXPOSE 3214

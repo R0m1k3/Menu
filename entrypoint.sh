@@ -3,14 +3,24 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-echo "Starting Menu Professional..."
+echo "=== Menu Professional Entrypoint ==="
+echo "Node version: $(node -v)"
+echo "Working directory: $(pwd)"
+
+# Check permissions
+echo "Checking prisma directory permissions..."
+ls -ld /app/prisma
+touch /app/prisma/test_write && echo "Write check: SUCCESS" && rm /app/prisma/test_write || echo "Write check: FAILED"
 
 # Run database synchronization
-# Note: In a production environment with persistent data, 
-# 'prisma db push' ensures the schema matches the code.
-echo "Synchronizing database schema..."
+echo "Synchronizing database schema with Prisma..."
+# Ensure DATABASE_URL is set for the CLI
+export DATABASE_URL=${DATABASE_URL:-"file:/app/prisma/dev.db"}
 npx prisma db push --accept-data-loss || echo "Database sync failed, but proceeding..."
 
-# Start the application using node as Next.js is in standalone mode
-echo "Launching server..."
+# Show database file if exists
+ls -l /app/prisma/dev.db || echo "Database file dev.db not yet created"
+
+# Start the application
+echo "Launching server on port ${PORT:-3214}..."
 exec node server.js
