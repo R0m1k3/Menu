@@ -46,11 +46,14 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
-# Explicitly copy Prisma and native node_modules (required for standalone mode)
+# Explicitly copy all native/prisma node_modules (required for standalone mode)
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/better-sqlite3 ./node_modules/better-sqlite3
 COPY --from=builder /app/node_modules/bcrypt ./node_modules/bcrypt
+COPY --from=builder /app/node_modules/bindings ./node_modules/bindings
+COPY --from=builder /app/node_modules/file-uri-to-path ./node_modules/file-uri-to-path
+COPY --from=builder /app/node_modules/node-addon-api ./node_modules/node-addon-api
 
 # Ensure prisma directory is accessible and writable for SQLite
 RUN mkdir -p /app/prisma && chmod -R 777 /app/prisma
