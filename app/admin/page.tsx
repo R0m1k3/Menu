@@ -116,15 +116,13 @@ export default async function AdminPage() {
                 }}>
                   <button type="submit" style={{
                     background: 'transparent',
-                    color: 'rgba(255,255,255,0.25)',
+                    color: 'rgba(255,255,255,0.3)',
                     padding: '0.4rem',
                     borderRadius: '8px',
                     flexShrink: 0,
                     transition: 'color 200ms',
-                  }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#ff6b7a')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
-                  >
+                    cursor: 'pointer',
+                  }}>
                     <Trash2 size={16} />
                   </button>
                 </form>

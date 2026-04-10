@@ -10,6 +10,8 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 const createPrismaClient = () => {
   const dbUrl = process.env.DATABASE_URL || 'file:/app/prisma/dev.db';
   console.log(`[DB] Connecting to: ${dbUrl}`);
+  
+  // Wrap with the Prisma driver adapter
   const adapter = new PrismaBetterSqlite3({ url: dbUrl });
   return new PrismaClient({ adapter });
 };
