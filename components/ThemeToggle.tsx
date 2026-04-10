@@ -17,10 +17,10 @@ export function ThemeToggle() {
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       aria-label="Basculer le thème"
       style={{
-        background: 'rgba(255,255,255,0.12)',
+        background: 'var(--card-bg)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        border: '1px solid rgba(255,255,255,0.18)',
+        border: '1px solid var(--card-border)',
         borderRadius: '50%',
         width: '38px',
         height: '38px',
@@ -28,12 +28,14 @@ export function ThemeToggle() {
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        transition: 'background 260ms ease',
+        transition: 'all 260ms ease',
       }}
+      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--card-hover-bg)'; e.currentTarget.style.borderColor = 'var(--card-hover-border)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.borderColor = 'var(--card-border)'; }}
     >
       {theme === 'dark'
-        ? <Sun size={15} color="rgba(255,255,255,0.85)" />
-        : <Moon size={15} color="rgba(255,255,255,0.85)" />
+        ? <Sun size={15} color="var(--fg-secondary)" />
+        : <Moon size={15} color="var(--fg-secondary)" />
       }
     </button>
   );

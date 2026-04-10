@@ -26,24 +26,28 @@ export function IconPicker({ iconName, color, onIconChange, onColorChange }: Ico
     <div style={{ position: 'relative' }}>
       {/* Trigger */}
       <button
+        className="icon-picker-trigger"
         type="button"
         onClick={() => setOpen(!open)}
         title="Choisir une icône"
         style={{
           width: '56px', height: '56px',
           borderRadius: '14px',
-          background: 'rgba(255,255,255,0.08)',
-          border: '1px solid rgba(255,255,255,0.15)',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--card-border)',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
-          transition: 'background 200ms ease',
+          transition: 'all 200ms ease',
         }}
       >
         <SelectedIcon size={28} color={color} strokeWidth={1.8} />
       </button>
+      <style>{`
+        .icon-picker-trigger:hover { background: var(--card-hover-bg) !important; border-color: var(--card-hover-border) !important; transform: scale(1.05); }
+      `}</style>
 
       {/* Picker panel */}
       {open && (
@@ -59,17 +63,17 @@ export function IconPicker({ iconName, color, onIconChange, onColorChange }: Ico
             left: 0,
             zIndex: 100,
             width: '320px',
-            background: 'rgba(25, 5, 35, 0.95)',
+            background: 'var(--bg-color)',
             backdropFilter: 'blur(30px)',
             WebkitBackdropFilter: 'blur(30px)',
-            border: '1px solid rgba(255,255,255,0.12)',
+            border: '1px solid var(--card-border)',
             borderRadius: '18px',
             padding: '1.1rem',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
+            boxShadow: 'var(--card-shadow)',
           }}>
             {/* Search */}
             <div style={{ position: 'relative', marginBottom: '0.85rem' }}>
-              <Search size={14} color="rgba(255,255,255,0.4)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+              <Search size={14} color="var(--fg-muted)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 type="text"
                 placeholder="Rechercher…"
@@ -81,7 +85,7 @@ export function IconPicker({ iconName, color, onIconChange, onColorChange }: Ico
             </div>
 
             {/* Icon grid */}
-            <div style={{
+            <div className="icon-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(7, 1fr)',
               gap: '4px',
@@ -95,38 +99,41 @@ export function IconPicker({ iconName, color, onIconChange, onColorChange }: Ico
                 return (
                   <button
                     key={name}
+                    className={`icon-btn ${isSelected ? 'selected' : ''}`}
                     type="button"
                     title={name}
                     onClick={() => { onIconChange(name); }}
                     style={{
-                      background: isSelected ? 'rgba(255,255,255,0.18)' : 'transparent',
-                      border: isSelected ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent',
+                      background: isSelected ? 'var(--accent-btn-hover)' : 'transparent',
+                      border: isSelected ? '1px solid var(--card-border)' : '1px solid transparent',
                       borderRadius: '8px',
                       padding: '6px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      transition: 'background 120ms',
+                      transition: 'all 120ms',
                     }}
-                    onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-                    onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <Icon size={18} color={isSelected ? color : 'rgba(255,255,255,0.65)'} strokeWidth={1.7} />
+                    <Icon size={18} color={isSelected ? color : 'var(--fg-secondary)'} strokeWidth={1.7} />
                   </button>
                 );
               })}
+              <style>{`
+                .icon-btn:hover:not(.selected) { background: var(--accent-btn-bg) !important; }
+              `}</style>
             </div>
 
             {/* Color palette */}
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.85rem' }}>
-              <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', fontWeight: 700, letterSpacing: '0.06em', marginBottom: '0.6rem' }}>
+            <div style={{ borderTop: '1px solid var(--card-border)', paddingTop: '0.85rem' }}>
+              <p style={{ fontSize: '0.7rem', color: 'var(--fg-muted)', fontWeight: 700, letterSpacing: '0.06em', marginBottom: '0.6rem' }}>
                 COULEUR
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {ICON_COLORS.map((c) => (
                   <button
                     key={c.value}
+                    className="color-btn"
                     type="button"
                     title={c.label}
                     onClick={() => onColorChange(c.value)}
@@ -135,16 +142,17 @@ export function IconPicker({ iconName, color, onIconChange, onColorChange }: Ico
                       borderRadius: '50%',
                       background: c.value,
                       border: color === c.value
-                        ? '2px solid white'
+                        ? `2px solid var(--fg)`
                         : '2px solid transparent',
-                      boxShadow: color === c.value ? '0 0 0 2px rgba(255,255,255,0.3)' : 'none',
+                      boxShadow: color === c.value ? `0 0 0 2px var(--card-border)` : 'none',
                       cursor: 'pointer',
                       transition: 'transform 150ms',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.15)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                   />
                 ))}
+                <style>{`
+                  .color-btn:hover { transform: scale(1.15) !important; }
+                `}</style>
               </div>
             </div>
           </div>

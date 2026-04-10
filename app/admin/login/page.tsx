@@ -39,16 +39,18 @@ export default function AdminLoginPage() {
             width: '60px',
             height: '60px',
             borderRadius: '18px',
-            background: 'var(--accent)',
+            background: 'var(--card-bg)',
+            border: '1px solid var(--card-border)',
+            backdropFilter: 'blur(16px)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '1rem',
-            boxShadow: '0 8px 24px var(--accent-glow)',
+            boxShadow: 'var(--card-shadow)',
           }}>
-            <Lock size={26} color="white" />
+            <Lock size={26} color="var(--fg)" />
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.03em' }}>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--fg)' }}>
             Administration
           </h1>
           <p style={{ color: 'var(--fg-secondary)', fontSize: '0.88rem', marginTop: '0.4rem' }}>
@@ -62,16 +64,29 @@ export default function AdminLoginPage() {
               <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--fg-secondary)', marginBottom: '0.5rem' }}>
                 Mot de passe
               </label>
-              <input name="password" type="password" required placeholder="••••••••" />
+              <input name="password" type="password" required placeholder="••••••••" style={{ background: 'var(--card-bg)', color: 'var(--fg)' }} />
             </div>
 
             {error && (
-              <p style={{ color: 'var(--error)', fontSize: '0.85rem', textAlign: 'center', background: 'rgba(255,59,48,0.08)', padding: '0.6rem', borderRadius: '8px' }}>
+              <p style={{ color: 'var(--error)', fontSize: '0.85rem', textAlign: 'center', background: 'var(--card-hover-bg)', padding: '0.6rem', borderRadius: '8px' }}>
                 {error}
               </p>
             )}
 
-            <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '0.4rem', width: '100%' }}>
+            <button type="submit" disabled={loading} className="btn-primary" style={{
+              marginTop: '0.4rem',
+              width: '100%',
+              background: 'var(--fg)',
+              color: 'var(--bg-color)',
+              padding: '0.85rem',
+              borderRadius: '12px',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              cursor: 'pointer',
+              border: 'none',
+              transition: 'opacity 200ms',
+              opacity: loading ? 0.6 : 1
+            }}>
               {loading ? 'Connexion...' : 'Se connecter →'}
             </button>
           </form>

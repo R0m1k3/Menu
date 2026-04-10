@@ -28,10 +28,12 @@ export function AddButtonForm() {
 
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.07)',
+      position: 'relative',
+      zIndex: 50,
+      background: 'var(--card-bg)',
       backdropFilter: 'blur(24px)',
       WebkitBackdropFilter: 'blur(24px)',
-      border: '1px solid rgba(255,255,255,0.12)',
+      border: '1px solid var(--card-border)',
       borderRadius: '20px',
       padding: '1.75rem',
       marginBottom: '2rem',
@@ -39,7 +41,7 @@ export function AddButtonForm() {
       <h2 style={{
         fontSize: '0.78rem',
         fontWeight: 700,
-        color: 'rgba(255,255,255,0.4)',
+        color: 'var(--fg-muted)',
         marginBottom: '1.25rem',
         letterSpacing: '0.08em',
         display: 'flex',
@@ -52,7 +54,7 @@ export function AddButtonForm() {
       <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
         {/* Icon picker */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
+          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--fg-muted)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
             ICÔNE
           </label>
           <IconPicker
@@ -65,7 +67,7 @@ export function AddButtonForm() {
 
         {/* Name */}
         <div style={{ flex: '1 1 140px' }}>
-          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
+          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--fg-muted)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
             NOM
           </label>
           <input name="name" type="text" placeholder="Ex: Slack, Notion…" required />
@@ -73,19 +75,20 @@ export function AddButtonForm() {
 
         {/* URL */}
         <div style={{ flex: '2 1 240px' }}>
-          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
+          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--fg-muted)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
             URL
           </label>
           <input name="url" type="url" placeholder="https://…" required />
         </div>
 
         <button
+          className="add-btn"
           type="submit"
           disabled={loading}
           style={{
-            background: 'rgba(255,255,255,0.14)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            color: '#fff',
+            background: 'var(--accent-btn-hover)',
+            border: '1px solid var(--card-border)',
+            color: 'var(--fg)',
             padding: '0.78rem 1.25rem',
             borderRadius: '12px',
             fontWeight: 600,
@@ -99,6 +102,9 @@ export function AddButtonForm() {
         >
           {loading ? '…' : 'Ajouter →'}
         </button>
+        <style>{`
+          .add-btn:hover { background: var(--success) !important; border-color: transparent !important; color: #fff !important; }
+        `}</style>
       </form>
     </div>
   );

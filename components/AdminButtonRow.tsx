@@ -55,6 +55,8 @@ export function AdminButtonRow({ button }: AdminButtonRowProps) {
   if (isEditing) {
     return (
       <div style={{
+        position: 'relative',
+        zIndex: 40,
         background: 'var(--card-bg)',
         backdropFilter: 'blur(20px)',
         border: '1px solid var(--card-hover-border)',

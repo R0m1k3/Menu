@@ -45,8 +45,8 @@
   --error: #ff3b30;
   --success: #34c759;
 
-  --glow-1: rgba(140, 50, 255, 0.05);
-  --glow-2: rgba(50, 140, 255, 0.05);
+  --glow-1: rgba(140, 50, 255, 0.2);
+  --glow-2: rgba(50, 140, 255, 0.2);
 }
 
 *, *::before, *::after {
@@ -75,25 +75,26 @@ body {
 body::before, body::after {
   content: '';
   position: fixed;
-  width: 60vw;
-  height: 60vw;
+  width: 80vw;
+  height: 80vw;
   border-radius: 50%;
-  filter: blur(140px);
+  filter: blur(180px);
+  -webkit-filter: blur(180px);
   z-index: -1;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.85;
   transition: background 300ms ease;
 }
 
 body::before {
-  top: -20vw;
-  left: -10vw;
+  top: -30vw;
+  left: -20vw;
   background: var(--glow-1);
 }
 
 body::after {
-  bottom: -20vw;
-  right: -10vw;
+  bottom: -30vw;
+  right: -20vw;
   background: var(--glow-2);
 }
 

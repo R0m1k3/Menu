@@ -23,21 +23,26 @@ export default async function AdminPage() {
       {/* Header */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link href="/" style={{
-            background: 'rgba(255,255,255,0.1)',
+          <Link href="/" className="back-btn" style={{
+            background: 'var(--card-bg)',
             backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.15)',
+            border: '1px solid var(--card-border)',
             borderRadius: '50%',
             width: '36px', height: '36px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'all 200ms ease'
           }}>
-            <ArrowLeft size={15} color="rgba(255,255,255,0.8)" />
+            <ArrowLeft size={15} color="var(--fg-secondary)" />
           </Link>
+          <style>{`
+            .back-btn:hover { background: var(--card-hover-bg) !important; border-color: var(--card-hover-border) !important; }
+            .logout-btn:hover { background: var(--card-hover-bg) !important; color: var(--fg) !important; }
+          `}</style>
           <div>
-            <h1 style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#fff' }}>
+            <h1 style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--fg)' }}>
               Administration
             </h1>
-            <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.1rem' }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--fg-muted)', marginTop: '0.1rem' }}>
               {buttons.length} application{buttons.length !== 1 ? 's' : ''} configurée{buttons.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -46,16 +51,18 @@ export default async function AdminPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <ThemeToggle />
           <form action={logoutAdmin}>
-            <button type="submit" style={{
-              background: 'rgba(255,255,255,0.08)',
+            <button type="submit" className="logout-btn" style={{
+              background: 'var(--accent-btn-bg)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              border: '1px solid var(--card-border)',
               borderRadius: '50px',
               padding: '0.45rem 0.9rem',
-              color: 'rgba(255,255,255,0.6)',
+              color: 'var(--fg-secondary)',
               fontSize: '0.82rem',
               fontWeight: 500,
               display: 'flex', alignItems: 'center', gap: '0.4rem',
+              cursor: 'pointer',
+              transition: 'all 200ms ease',
             }}>
               <LogOut size={13} /> Déconnexion
             </button>
