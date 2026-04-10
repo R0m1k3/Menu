@@ -2,7 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  serverExternalPackages: ['@prisma/client'],
+  serverExternalPackages: [
+    '@prisma/client',
+    '@prisma/adapter-better-sqlite3',
+    'better-sqlite3',
+    'bcrypt',
+    'prisma'
+  ],
 };
 
 export default nextConfig;
