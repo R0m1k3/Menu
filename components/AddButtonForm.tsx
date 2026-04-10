@@ -2,22 +2,25 @@
 
 import React, { useState } from 'react';
 import { addButton } from '@/app/actions/admin';
-import { EmojiPicker } from '@/components/EmojiPicker';
+import { IconPicker } from '@/components/IconPicker';
+import { serializeIcon } from '@/lib/lucideIcons';
 import { PlusCircle } from 'lucide-react';
 
 export function AddButtonForm() {
-  const [icon, setIcon] = useState('🔗');
+  const [iconName, setIconName] = useState('Globe');
+  const [iconColor, setIconColor] = useState('#22d3ee');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    formData.set('icon', icon);
+    formData.set('icon', serializeIcon(iconName, iconColor));
     try {
       await addButton(formData);
       (e.target as HTMLFormElement).reset();
-      setIcon('🔗');
+      setIconName('Globe');
+      setIconColor('#22d3ee');
     } finally {
       setLoading(false);
     }
@@ -34,30 +37,35 @@ export function AddButtonForm() {
       marginBottom: '2rem',
     }}>
       <h2 style={{
-        fontSize: '0.85rem',
+        fontSize: '0.78rem',
         fontWeight: 700,
-        color: 'rgba(255,255,255,0.5)',
+        color: 'rgba(255,255,255,0.4)',
         marginBottom: '1.25rem',
         letterSpacing: '0.08em',
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem',
       }}>
-        <PlusCircle size={15} /> AJOUTER UNE APPLICATION
+        <PlusCircle size={14} /> AJOUTER UNE APPLICATION
       </h2>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-        {/* Emoji picker */}
+        {/* Icon picker */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.45)', marginBottom: '0.45rem' }}>
+          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
             ICÔNE
           </label>
-          <EmojiPicker value={icon} onChange={setIcon} />
+          <IconPicker
+            iconName={iconName}
+            color={iconColor}
+            onIconChange={setIconName}
+            onColorChange={setIconColor}
+          />
         </div>
 
         {/* Name */}
         <div style={{ flex: '1 1 140px' }}>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.45)', marginBottom: '0.45rem' }}>
+          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
             NOM
           </label>
           <input name="name" type="text" placeholder="Ex: Slack, Notion…" required />
@@ -65,22 +73,20 @@ export function AddButtonForm() {
 
         {/* URL */}
         <div style={{ flex: '2 1 240px' }}>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.45)', marginBottom: '0.45rem' }}>
+          <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
             URL
           </label>
           <input name="url" type="url" placeholder="https://…" required />
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
           style={{
-            background: 'rgba(255,255,255,0.16)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.22)',
+            background: 'rgba(255,255,255,0.14)',
+            border: '1px solid rgba(255,255,255,0.2)',
             color: '#fff',
-            padding: '0.75rem 1.25rem',
+            padding: '0.78rem 1.25rem',
             borderRadius: '12px',
             fontWeight: 600,
             fontSize: '0.88rem',

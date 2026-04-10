@@ -2,16 +2,13 @@ import { prisma } from '@/lib/db';
 import { isAuthenticated, logoutAdmin, deleteButton } from '@/app/actions/admin';
 import { redirect } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { LogOut, ArrowLeft, Trash2, Globe } from 'lucide-react';
-import Image from 'next/image';
+import { LogOut, ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { AddButtonForm } from '@/components/AddButtonForm';
+import { ICON_MAP, parseIcon } from '@/lib/lucideIcons';
+import { Globe } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
-
-function getDomain(url: string): string {
-  try { return new URL(url).hostname; } catch { return url; }
-}
 
 export default async function AdminPage() {
   const auth = await isAuthenticated();
@@ -41,7 +38,7 @@ export default async function AdminPage() {
             <h1 style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#fff' }}>
               Administration
             </h1>
-            <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)', marginTop: '0.1rem' }}>
+            <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.1rem' }}>
               {buttons.length} application{buttons.length !== 1 ? 's' : ''} configurée{buttons.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -56,7 +53,7 @@ export default async function AdminPage() {
               border: '1px solid rgba(255,255,255,0.12)',
               borderRadius: '50px',
               padding: '0.45rem 0.9rem',
-              color: 'rgba(255,255,255,0.7)',
+              color: 'rgba(255,255,255,0.6)',
               fontSize: '0.82rem',
               fontWeight: 500,
               display: 'flex', alignItems: 'center', gap: '0.4rem',
@@ -72,14 +69,14 @@ export default async function AdminPage() {
 
       {/* Button list */}
       {buttons.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '4rem', color: 'rgba(255,255,255,0.35)', fontSize: '0.9rem' }}>
+        <div style={{ textAlign: 'center', padding: '4rem', color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem' }}>
           Aucun bouton configuré.
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {(buttons as any[]).map((btn) => {
-            const domain = getDomain(btn.url);
-            const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+            const { name: iconName, color } = parseIcon(btn.icon);
+            const IconComponent = ICON_MAP[iconName] || Globe;
 
             return (
               <div key={btn.id} style={{
@@ -94,25 +91,20 @@ export default async function AdminPage() {
                 gap: '1rem',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
-                  {/* Icon: emoji or favicon */}
                   <div style={{
                     width: '40px', height: '40px',
                     borderRadius: '10px',
                     background: 'rgba(255,255,255,0.08)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
-                    fontSize: '1.3rem',
                   }}>
-                    {btn.icon ? btn.icon : (
-                      <Image src={faviconUrl} alt={btn.name} width={20} height={20} unoptimized />
-                    )}
+                    <IconComponent size={22} color={color} strokeWidth={1.7} />
                   </div>
-
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {btn.name}
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '360px' }}>
+                    <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.38)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '380px' }}>
                       {btn.url}
                     </div>
                   </div>
@@ -124,13 +116,14 @@ export default async function AdminPage() {
                 }}>
                   <button type="submit" style={{
                     background: 'transparent',
-                    color: 'rgba(255,255,255,0.3)',
+                    color: 'rgba(255,255,255,0.25)',
                     padding: '0.4rem',
                     borderRadius: '8px',
                     flexShrink: 0,
+                    transition: 'color 200ms',
                   }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#ff6b7a')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
                   >
                     <Trash2 size={16} />
                   </button>
