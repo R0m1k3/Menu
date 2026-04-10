@@ -27,17 +27,24 @@ export default async function Home() {
         padding: '1.5rem 2rem',
         gap: '0.6rem',
       }}>
-        <Link href="/admin" aria-label="Administration" style={{
-          background: 'rgba(255,255,255,0.10)',
+        <Link href="/admin" aria-label="Administration" className="settings-btn" style={{
+          background: 'var(--card-bg)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.15)',
+          border: '1px solid var(--card-border)',
           borderRadius: '50%',
           width: '36px', height: '36px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'all 200ms ease'
         }}>
-          <Settings size={15} color="rgba(255,255,255,0.7)" />
+          <Settings size={15} color="var(--fg-secondary)" />
         </Link>
+        <style>{`
+          .settings-btn:hover {
+            background: var(--card-hover-bg) !important;
+            border-color: var(--card-hover-border) !important;
+          }
+        `}</style>
         <ThemeToggle />
       </header>
 
@@ -57,13 +64,12 @@ export default async function Home() {
             fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#fff',
-            textShadow: '0 2px 20px rgba(0,0,0,0.3)',
+            color: 'var(--fg)',
           }}>
             Menu Application
           </h1>
           {buttons.length > 0 && (
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.9rem', marginTop: '0.4rem', fontWeight: 400 }}>
+            <p style={{ color: 'var(--fg-muted)', fontSize: '0.9rem', marginTop: '0.4rem', fontWeight: 500 }}>
               {buttons.length} application{buttons.length > 1 ? 's' : ''} disponible{buttons.length > 1 ? 's' : ''}
             </p>
           )}
@@ -71,9 +77,9 @@ export default async function Home() {
 
         {/* Grid */}
         {buttons.length === 0 ? (
-          <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+          <div style={{ textAlign: 'center', color: 'var(--fg-muted)' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔗</div>
-            <p style={{ fontWeight: 600, fontSize: '1.05rem', color: '#fff', marginBottom: '0.5rem' }}>
+            <p style={{ fontWeight: 600, fontSize: '1.05rem', color: 'var(--fg)', marginBottom: '0.5rem' }}>
               Aucune application
             </p>
             <p style={{ fontSize: '0.88rem', marginBottom: '1.75rem' }}>
@@ -81,10 +87,10 @@ export default async function Home() {
             </p>
             <Link href="/admin" style={{
               padding: '0.65rem 1.4rem',
-              background: 'rgba(255,255,255,0.15)',
-              border: '1px solid rgba(255,255,255,0.22)',
+              background: 'var(--card-bg)',
+              border: '1px solid var(--card-border)',
               borderRadius: '50px',
-              color: '#fff',
+              color: 'var(--fg)',
               fontWeight: 600,
               fontSize: '0.88rem',
               backdropFilter: 'blur(12px)',

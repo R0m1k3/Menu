@@ -5,8 +5,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { LogOut, ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { AddButtonForm } from '@/components/AddButtonForm';
-import { ICON_MAP, parseIcon } from '@/lib/lucideIcons';
-import { Globe } from 'lucide-react';
+import { AdminButtonRow } from '@/components/AdminButtonRow';
 
 export const dynamic = 'force-dynamic';
 
@@ -69,66 +68,14 @@ export default async function AdminPage() {
 
       {/* Button list */}
       {buttons.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '4rem', color: 'rgba(255,255,255,0.3)', fontSize: '0.9rem' }}>
+        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--fg-muted)', fontSize: '0.95rem' }}>
           Aucun bouton configuré.
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {(buttons as any[]).map((btn) => {
-            const { name: iconName, color } = parseIcon(btn.icon);
-            const IconComponent = ICON_MAP[iconName] || Globe;
-
-            return (
-              <div key={btn.id} style={{
-                background: 'rgba(255,255,255,0.06)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: '14px',
-                padding: '0.85rem 1.2rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '1rem',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
-                  <div style={{
-                    width: '40px', height: '40px',
-                    borderRadius: '10px',
-                    background: 'rgba(255,255,255,0.08)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                  }}>
-                    <IconComponent size={22} color={color} strokeWidth={1.7} />
-                  </div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {btn.name}
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.38)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '380px' }}>
-                      {btn.url}
-                    </div>
-                  </div>
-                </div>
-
-                <form action={async () => {
-                  'use server';
-                  await deleteButton(btn.id);
-                }}>
-                  <button type="submit" style={{
-                    background: 'transparent',
-                    color: 'rgba(255,255,255,0.3)',
-                    padding: '0.4rem',
-                    borderRadius: '8px',
-                    flexShrink: 0,
-                    transition: 'color 200ms',
-                    cursor: 'pointer',
-                  }}>
-                    <Trash2 size={16} />
-                  </button>
-                </form>
-              </div>
-            );
-          })}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          {(buttons as any[]).map((btn) => (
+            <AdminButtonRow key={btn.id} button={btn} />
+          ))}
         </div>
       )}
     </div>
