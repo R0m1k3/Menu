@@ -6,6 +6,7 @@ import { LogOut, ArrowLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { AddButtonForm } from '@/components/AddButtonForm';
 import { AdminButtonRow } from '@/components/AdminButtonRow';
+import { EditTitleForm } from '@/components/EditTitleForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +17,9 @@ export default async function AdminPage() {
   const buttons = await prisma.button.findMany({
     orderBy: { order: 'asc' },
   });
+
+  const titleConfig = await prisma.config.findUnique({ where: { id: 'app_title' } });
+  const appTitle = titleConfig?.value || 'Menu Application';
 
   return (
     <div style={{ minHeight: '100vh', padding: '1.5rem 2rem', maxWidth: '860px', margin: '0 auto' }}>
@@ -69,6 +73,9 @@ export default async function AdminPage() {
           </form>
         </div>
       </header>
+
+      {/* Edit Title Form */}
+      <EditTitleForm currentTitle={appTitle} />
 
       {/* Add form */}
       <AddButtonForm />

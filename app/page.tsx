@@ -16,6 +16,9 @@ export default async function Home() {
     orderBy: { order: 'asc' },
   });
 
+  const titleConfig = await prisma.config.findUnique({ where: { id: 'app_title' } });
+  const appTitle = titleConfig?.value || 'Menu Application';
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
@@ -66,7 +69,7 @@ export default async function Home() {
             letterSpacing: '-0.04em',
             color: 'var(--fg)',
           }}>
-            Menu Application
+            {appTitle}
           </h1>
           {buttons.length > 0 && (
             <p style={{ color: 'var(--fg-muted)', fontSize: '0.9rem', marginTop: '0.4rem', fontWeight: 500 }}>

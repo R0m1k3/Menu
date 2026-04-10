@@ -105,3 +105,22 @@ export async function deleteButton(id: number) {
   revalidatePath('/admin');
   revalidatePath('/');
 }
+
+/**
+ * Update global app title.
+ */
+export async function updateAppTitle(formData: FormData) {
+  if (!(await isAuthenticated())) throw new Error('Non autorisé');
+
+  const title = formData.get('title') as string;
+  if (!title) throw new Error('Titre requis.');
+
+  await prisma.config.upsert({
+    where: { id: 'app_title' },
+    update: { value: title },
+    create: { id: 'app_title', value: title },
+  });
+
+  revalidatePath('/admin');
+  revalidatePath('/');
+}
