@@ -1,16 +1,19 @@
 #!/bin/sh
 set -e
 
-echo "=== Menu Professional Entrypoint ==="
-echo "Node version: $(node -v)"
+echo "=== Menu Professional — Starting ==="
+echo "NODE_ENV:     ${NODE_ENV}"
+echo "PORT:         ${PORT:-3214}"
 echo "DATABASE_URL: ${DATABASE_URL}"
 
 # Ensure the prisma directory exists and is writable
 mkdir -p /app/prisma
 chmod -R 777 /app/prisma
 
-echo "Write check on /app/prisma..."
-touch /app/prisma/.write_test && echo "OK" && rm /app/prisma/.write_test
+echo ""
+echo "[1/2] Initializing database schema..."
+node /app/scripts/init-db.mjs
 
-echo "Launching server on port ${PORT:-3214}..."
+echo ""
+echo "[2/2] Starting Next.js server..."
 exec node server.js
