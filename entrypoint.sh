@@ -12,6 +12,9 @@ echo "Checking prisma directory permissions..."
 ls -ld /app/prisma
 touch /app/prisma/test_write && echo "Write check: SUCCESS" && rm /app/prisma/test_write || echo "Write check: FAILED"
 
+echo "Locating Prisma engine binary..."
+find ./node_modules -name "libquery_engine*" || echo "Engine binary NOT found!"
+
 # Run database synchronization
 echo "Synchronizing database schema with Prisma..."
 # Ensure DATABASE_URL is set for the CLI

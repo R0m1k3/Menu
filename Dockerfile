@@ -46,6 +46,10 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
+# Explicitly copy Prisma node_modules (required for standalone mode)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
 # Ensure prisma directory is accessible and writable for SQLite
 RUN mkdir -p /app/prisma && chmod -R 777 /app/prisma
 
