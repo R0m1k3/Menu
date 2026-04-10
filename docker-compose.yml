@@ -1,0 +1,26 @@
+services:
+  menu-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: menu-professional
+    ports:
+      - "3214:3214"
+    volumes:
+      - ./.env:/app/.env
+      - menu_db:/app/prisma
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3214
+    networks:
+      - nginx_default
+    restart: always
+
+networks:
+  nginx_default:
+    external: true
+
+volumes:
+  menu_db:
+    driver: local
