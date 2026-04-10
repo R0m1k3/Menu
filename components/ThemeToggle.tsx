@@ -8,37 +8,32 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  React.useEffect(() => setMounted(true), []);
 
-  if (!mounted) {
-    return <div style={{ width: '40px', height: '40px' }} />;
-  }
+  if (!mounted) return <div style={{ width: '38px', height: '38px' }} />;
 
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       aria-label="Basculer le thème"
       style={{
-        background: 'var(--glass-bg)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid var(--glass-border)',
-        boxShadow: 'var(--glass-shadow)',
+        background: 'rgba(255,255,255,0.12)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255,255,255,0.18)',
         borderRadius: '50%',
-        width: '40px',
-        height: '40px',
+        width: '38px',
+        height: '38px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        flexShrink: 0,
+        transition: 'background 260ms ease',
       }}
     >
       {theme === 'dark'
-        ? <Sun size={18} color="var(--fg)" />
-        : <Moon size={18} color="var(--fg)" />
+        ? <Sun size={15} color="rgba(255,255,255,0.85)" />
+        : <Moon size={15} color="rgba(255,255,255,0.85)" />
       }
     </button>
   );

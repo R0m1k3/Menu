@@ -10,113 +10,88 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const configured = await isConfigured();
-
-  if (!configured) {
-    redirect('/setup');
-  }
+  if (!configured) redirect('/setup');
 
   const buttons = await prisma.button.findMany({
     orderBy: { order: 'asc' },
   });
 
   return (
-    <div className="page-container">
-      {/* Header */}
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      {/* Top bar */}
       <header style={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
-        marginBottom: '3.5rem',
-        paddingTop: '0.5rem',
+        padding: '1.5rem 2rem',
+        gap: '0.75rem',
       }}>
-        <div>
-          <h1 style={{
-            fontSize: 'clamp(1.6rem, 3vw, 2.4rem)',
-            fontWeight: 700,
-            letterSpacing: '-0.035em',
-            lineHeight: 1.1,
-          }}>
-            Applications
-          </h1>
-          {buttons.length > 0 && (
-            <p style={{ color: 'var(--fg-secondary)', fontSize: '0.9rem', marginTop: '0.3rem', fontWeight: 400 }}>
-              {buttons.length} {buttons.length > 1 ? 'liens configurés' : 'lien configuré'}
-            </p>
-          )}
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <Link href="/admin" aria-label="Administration" style={{
-            background: 'var(--glass-bg)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid var(--glass-border)',
-            boxShadow: 'var(--glass-shadow)',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <Settings size={18} color="var(--fg-secondary)" />
-          </Link>
-          <ThemeToggle />
-        </div>
+        <Link href="/admin" aria-label="Administration" style={{
+          background: 'rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255,255,255,0.18)',
+          borderRadius: '50%',
+          width: '38px',
+          height: '38px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'background 260ms ease',
+        }}>
+          <Settings size={16} color="rgba(255,255,255,0.8)" />
+        </Link>
+        <ThemeToggle />
       </header>
 
-      {/* Button grid */}
-      {buttons.length === 0 ? (
-        <div style={{
-          textAlign: 'center',
-          padding: '8rem 2rem',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1.5rem',
-        }}>
-          <div style={{
-            width: '72px',
-            height: '72px',
-            borderRadius: '20px',
-            background: 'var(--glass-bg)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid var(--glass-border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '2rem',
-          }}>
-            🔗
-          </div>
-          <div>
-            <p style={{ fontWeight: 600, marginBottom: '0.4rem' }}>Aucune application</p>
-            <p style={{ color: 'var(--fg-secondary)', fontSize: '0.9rem' }}>
-              Ajoutez vos premiers liens depuis le panel d'administration.
+      {/* Center content */}
+      <main style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}>
+        {buttons.length === 0 ? (
+          <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔗</div>
+            <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem', color: '#fff' }}>
+              Aucune application configurée
             </p>
+            <p style={{ fontSize: '0.9rem', marginBottom: '2rem' }}>
+              Ajoutez vos premiers raccourcis depuis l'administration.
+            </p>
+            <Link href="/admin" style={{
+              padding: '0.7rem 1.5rem',
+              background: 'rgba(255,255,255,0.18)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              borderRadius: '50px',
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              backdropFilter: 'blur(12px)',
+            }}>
+              Configurer →
+            </Link>
           </div>
-          <Link href="/admin" style={{
-            padding: '0.7rem 1.4rem',
-            background: 'var(--accent)',
-            color: 'white',
-            borderRadius: '50px',
-            fontSize: '0.9rem',
-            fontWeight: 600,
+        ) : (
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1.25rem',
+            justifyContent: 'center',
+            maxWidth: '900px',
           }}>
-            Configurer →
-          </Link>
-        </div>
-      ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-          gap: '1.25rem',
-        }}>
-          {buttons.map((btn: any) => (
-            <MenuButton key={btn.id} name={btn.name} url={btn.url} />
-          ))}
-        </div>
-      )}
+            {buttons.map((btn: any) => (
+              <MenuButton key={btn.id} name={btn.name} url={btn.url} />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 }
