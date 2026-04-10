@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db';
 import { verifyPassword } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Handle admin login.
@@ -67,6 +68,10 @@ export async function addButton(formData: FormData) {
   await prisma.button.create({
     data: { name, url, order: 0 },
   });
+
+  // Revalidate both admin and home pages to reflect new button immediately
+  revalidatePath('/admin');
+  revalidatePath('/');
 }
 
 /**
@@ -75,4 +80,8 @@ export async function addButton(formData: FormData) {
 export async function deleteButton(id: number) {
   if (!(await isAuthenticated())) throw new Error('Non autorisé');
   await prisma.button.delete({ where: { id } });
+
+  // Revalidate both admin and home pages to reflect deletion immediately
+  revalidatePath('/admin');
+  revalidatePath('/');
 }

@@ -1,16 +1,19 @@
 .card {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--card-shadow);
-  border-radius: 24px;
-  padding: 2rem;
-  transition: var(--transition-smooth);
+  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hoverable:hover {
+  box-shadow: var(--glass-hover-shadow);
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
-  border-color: var(--accent);
+}
+
+.hoverable:active {
+  transform: translateY(-2px);
+  transition-duration: 80ms;
 }

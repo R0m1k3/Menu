@@ -3,33 +3,43 @@
 import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { GlassCard } from './GlassCard';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
-  // Avoid hydration mismatch
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return (
-      <GlassCard className="glass" style={{ padding: '0.6rem', border: 'none' }}>
-        <div style={{ width: '24px', height: '24px' }}></div>
-      </GlassCard>
-    );
+    return <div style={{ width: '40px', height: '40px' }} />;
   }
 
   return (
-    <GlassCard 
-      as="button"
-      className="glass" 
-      style={{ padding: '0.6rem', cursor: 'pointer' }}
+    <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      aria-label="Basculer le thème"
+      style={{
+        background: 'var(--glass-bg)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid var(--glass-border)',
+        boxShadow: 'var(--glass-shadow)',
+        borderRadius: '50%',
+        width: '40px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        flexShrink: 0,
+      }}
     >
-      {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
-    </GlassCard>
+      {theme === 'dark'
+        ? <Sun size={18} color="var(--fg)" />
+        : <Moon size={18} color="var(--fg)" />
+      }
+    </button>
   );
 }

@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
     'bcrypt',
     'prisma'
   ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.google.com',
+        pathname: '/s2/favicons/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 't0.gstatic.com',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
