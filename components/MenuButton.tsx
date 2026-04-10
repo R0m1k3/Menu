@@ -9,17 +9,17 @@ import styles from './MenuButton.module.css';
 interface MenuButtonProps {
   name: string;
   url: string;
+  icon?: string | null;
 }
 
 function getDomain(url: string): string {
-  try {
-    return new URL(url).hostname;
-  } catch {
-    return url;
-  }
+  try { return new URL(url).hostname; } catch { return url; }
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = ({ name, url }) => {
+/**
+ * MenuButton — displays emoji icon if set, falls back to Google favicon.
+ */
+export const MenuButton: React.FC<MenuButtonProps> = ({ name, url, icon }) => {
   const domain = getDomain(url);
   const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
   const [faviconError, setFaviconError] = useState(false);
@@ -27,7 +27,11 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ name, url }) => {
   return (
     <Link href={url} target="_blank" rel="noopener noreferrer" className={styles.menuButton}>
       <div className={styles.faviconWrapper}>
-        {!faviconError ? (
+        {icon ? (
+          // Custom emoji icon
+          <span style={{ fontSize: '2.2rem', lineHeight: 1 }}>{icon}</span>
+        ) : !faviconError ? (
+          // Auto favicon from Google CDN
           <Image
             src={faviconUrl}
             alt={`${name} favicon`}

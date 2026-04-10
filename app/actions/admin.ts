@@ -8,7 +8,6 @@ import { revalidatePath } from 'next/cache';
 
 /**
  * Handle admin login.
- * @param formData - The form data containing the password.
  */
 export async function loginAdmin(formData: FormData) {
   const password = formData.get('password') as string;
@@ -28,7 +27,7 @@ export async function loginAdmin(formData: FormData) {
     cookieStore.set('admin_auth', 'true', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24, // 24 hours
+      maxAge: 60 * 60 * 24,
       path: '/',
     });
     redirect('/admin');
@@ -55,21 +54,43 @@ export async function isAuthenticated() {
 }
 
 /**
- * Add a new menu button.
+ * Add a new menu button with optional icon.
  */
 export async function addButton(formData: FormData) {
   if (!(await isAuthenticated())) throw new Error('Non autorisé');
 
   const name = formData.get('name') as string;
   const url = formData.get('url') as string;
+  const icon = (formData.get('icon') as string) || null;
 
   if (!name || !url) throw new Error('Champs requis manquants.');
 
   await prisma.button.create({
-    data: { name, url, order: 0 },
+    data: { name, url, icon, order: 0 },
   });
 
-  // Revalidate both admin and home pages to reflect new button immediately
+  revalidatePath('/admin');
+  revalidatePath('/');
+}
+
+/**
+ * Update an existing button (name, url, icon).
+ */
+export async function updateButton(formData: FormData) {
+  if (!(await isAuthenticated())) throw new Error('Non autorisé');
+
+  const id = parseInt(formData.get('id') as string, 10);
+  const name = formData.get('name') as string;
+  const url = formData.get('url') as string;
+  const icon = (formData.get('icon') as string) || null;
+
+  if (!id || !name || !url) throw new Error('Champs requis manquants.');
+
+  await prisma.button.update({
+    where: { id },
+    data: { name, url, icon },
+  });
+
   revalidatePath('/admin');
   revalidatePath('/');
 }
@@ -81,7 +102,6 @@ export async function deleteButton(id: number) {
   if (!(await isAuthenticated())) throw new Error('Non autorisé');
   await prisma.button.delete({ where: { id } });
 
-  // Revalidate both admin and home pages to reflect deletion immediately
   revalidatePath('/admin');
   revalidatePath('/');
 }

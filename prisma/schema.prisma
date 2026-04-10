@@ -17,8 +17,9 @@ model Config {
 }
 
 model Button {
-  id    Int    @id @default(autoincrement())
+  id    Int     @id @default(autoincrement())
   name  String
   url   String
-  order Int    @default(0)
+  icon  String?
+  order Int     @default(0)
 }

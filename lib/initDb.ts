@@ -3,8 +3,7 @@ import path from 'path';
 
 /**
  * Initializes the SQLite database schema using raw SQL.
- * This bypasses Prisma CLI entirely, avoiding CLI environment issues in Docker.
- * Safe to run multiple times (CREATE TABLE IF NOT EXISTS).
+ * Safe to run multiple times — uses IF NOT EXISTS and handles migrations.
  */
 export function initializeDatabase(): void {
   const dbUrl = process.env.DATABASE_URL || 'file:/app/prisma/dev.db';
@@ -18,7 +17,7 @@ export function initializeDatabase(): void {
   try {
     const db = new Database(resolvedPath);
 
-    // Create Config table
+    // Config table
     db.exec(`
       CREATE TABLE IF NOT EXISTS "Config" (
         "id"    TEXT NOT NULL PRIMARY KEY,
@@ -26,7 +25,7 @@ export function initializeDatabase(): void {
       );
     `);
 
-    // Create Button table
+    // Button table (base)
     db.exec(`
       CREATE TABLE IF NOT EXISTS "Button" (
         "id"    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -35,6 +34,14 @@ export function initializeDatabase(): void {
         "order" INTEGER NOT NULL DEFAULT 0
       );
     `);
+
+    // Migration: add icon column if missing (added in v2)
+    try {
+      db.exec(`ALTER TABLE "Button" ADD COLUMN "icon" TEXT;`);
+      console.log('[DB Init] Migration applied: Button.icon column added.');
+    } catch {
+      // Column already exists — no action needed
+    }
 
     db.close();
     console.log('[DB Init] Schema ready.');
