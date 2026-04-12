@@ -1,21 +1,54 @@
+@keyframes cardEntry {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .card {
   background: var(--card-bg);
   backdrop-filter: blur(28px) saturate(1.8);
   -webkit-backdrop-filter: blur(28px) saturate(1.8);
-  border: 1px solid var(--card-border);
+  border: 1.5px solid var(--card-border);
   box-shadow: var(--card-shadow);
   border-radius: 20px;
-  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 320ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: cardEntry 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, background, border-color;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+.hoverable {
+  cursor: pointer;
+  position: relative;
 }
 
 .hoverable:hover {
   background: var(--card-hover-bg);
-  border-color: var(--card-hover-border);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 16px 40px rgba(0, 212, 255, 0.15);
+  transform: translateY(-6px);
+}
+
+.hoverable:hover::before {
+  opacity: 1;
 }
 
 .hoverable:active {
   transform: translateY(-2px);
-  transition-duration: 80ms;
+  transition-duration: 100ms;
 }

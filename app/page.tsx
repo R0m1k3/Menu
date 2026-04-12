@@ -21,34 +21,90 @@ export default async function Home() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <style>{`
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.98); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .header-btn {
+          background: var(--card-bg);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1.5px solid var(--card-border);
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          will-change: transform, background, border-color;
+        }
+        .header-btn:hover {
+          background: var(--card-hover-bg);
+          border-color: var(--accent-primary);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 212, 255, 0.15);
+        }
+        .header-btn:active {
+          transform: scale(0.95);
+        }
+        .page-header {
+          animation: slideDown 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .page-title {
+          animation: fadeInScale 500ms cubic-bezier(0.34, 1.56, 0.64, 1) 100ms both;
+        }
+        .page-subtitle {
+          animation: fadeInScale 500ms cubic-bezier(0.34, 1.56, 0.64, 1) 200ms both;
+        }
+        .empty-state {
+          animation: fadeInScale 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 200ms both;
+        }
+        .config-btn {
+          padding: 0.75rem 1.6rem;
+          background: var(--accent-primary);
+          border: 1.5px solid var(--accent-primary);
+          border-radius: 12px;
+          color: #000;
+          font-weight: 700;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          will-change: transform, box-shadow;
+        }
+        .config-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 30px rgba(0, 212, 255, 0.3);
+          background: #00e5ff;
+        }
+        .config-btn:active {
+          transform: scale(0.98);
+        }
+        .buttons-grid {
+          animation: fadeInScale 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 200ms both;
+        }
+      `}</style>
 
       {/* Top controls */}
-      <header style={{
+      <header className="page-header" style={{
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '1.5rem 2rem',
-        gap: '0.6rem',
+        padding: 'max(1.5rem, 2vw) max(2rem, 4vw)',
+        gap: '0.8rem',
       }}>
-        <Link href="/admin" aria-label="Administration" className="settings-btn" style={{
-          background: 'var(--card-bg)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid var(--card-border)',
-          borderRadius: '50%',
-          width: '36px', height: '36px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transition: 'all 200ms ease'
-        }}>
-          <Settings size={15} color="var(--fg-secondary)" />
-        </Link>
-        <style>{`
-          .settings-btn:hover {
-            background: var(--card-hover-bg) !important;
-            border-color: var(--card-hover-border) !important;
-          }
-        `}</style>
-        <ThemeToggle />
+        <div></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <Link href="/admin" aria-label="Administration" className="header-btn">
+            <Settings size={16} color="var(--fg-secondary)" strokeWidth={1.8} />
+          </Link>
+          <ThemeToggle />
+        </div>
       </header>
 
       {/* Center content */}
@@ -58,56 +114,73 @@ export default async function Home() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem',
-        gap: '3rem',
+        padding: 'max(2rem, 4vw)',
+        gap: '2.5rem',
       }}>
         {/* Title */}
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{
-            fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+        <div style={{ textAlign: 'center', maxWidth: '600px' }}>
+          <h1 className="page-title" style={{
+            fontSize: 'clamp(2rem, 5vw, 3.2rem)',
             fontWeight: 800,
             letterSpacing: '-0.04em',
             color: 'var(--fg)',
+            lineHeight: 1.2,
+            marginBottom: '0.8rem',
           }}>
             {appTitle}
           </h1>
           {buttons.length > 0 && (
-            <p style={{ color: 'var(--fg-muted)', fontSize: '0.9rem', marginTop: '0.4rem', fontWeight: 500 }}>
+            <p className="page-subtitle" style={{
+              color: 'var(--fg-secondary)',
+              fontSize: 'clamp(0.85rem, 2vw, 1rem)',
+              fontWeight: 500,
+              letterSpacing: '0.01em',
+            }}>
               {buttons.length} application{buttons.length > 1 ? 's' : ''} disponible{buttons.length > 1 ? 's' : ''}
             </p>
           )}
         </div>
 
-        {/* Grid */}
+        {/* Grid or Empty State */}
         {buttons.length === 0 ? (
-          <div style={{ textAlign: 'center', color: 'var(--fg-muted)' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔗</div>
-            <p style={{ fontWeight: 600, fontSize: '1.05rem', color: 'var(--fg)', marginBottom: '0.5rem' }}>
+          <div className="empty-state" style={{
+            textAlign: 'center',
+            color: 'var(--fg-muted)',
+            padding: '2rem',
+          }}>
+            <div style={{
+              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+              marginBottom: '1.5rem',
+              opacity: 0.7,
+            }}>🔗</div>
+            <p style={{
+              fontWeight: 700,
+              fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+              color: 'var(--fg)',
+              marginBottom: '0.8rem',
+            }}>
               Aucune application
             </p>
-            <p style={{ fontSize: '0.88rem', marginBottom: '1.75rem' }}>
+            <p style={{
+              fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
+              marginBottom: '2rem',
+              color: 'var(--fg-muted)',
+            }}>
               Ajoutez vos raccourcis depuis l'administration.
             </p>
-            <Link href="/admin" style={{
-              padding: '0.65rem 1.4rem',
-              background: 'var(--card-bg)',
-              border: '1px solid var(--card-border)',
-              borderRadius: '50px',
-              color: 'var(--fg)',
-              fontWeight: 600,
-              fontSize: '0.88rem',
-              backdropFilter: 'blur(12px)',
-            }}>
+            <Link href="/admin" className="config-btn">
               Configurer →
             </Link>
           </div>
         ) : (
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '1.25rem',
+          <div className="buttons-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            gap: 'clamp(1rem, 3vw, 1.5rem)',
             justifyContent: 'center',
-            maxWidth: '960px',
+            maxWidth: '1000px',
+            width: '100%',
+            padding: '0 1rem',
           }}>
             {(buttons as any[]).map((btn) => (
               <MenuButton key={btn.id} name={btn.name} url={btn.url} icon={btn.icon} />
