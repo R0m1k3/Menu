@@ -163,7 +163,7 @@ export function AdminButtonRow({ button }: AdminButtonRowProps) {
         justifyContent: 'space-between',
         gap: 'clamp(0.8rem, 2vw, 1.2rem)',
         transition: 'all 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        will-change: 'transform, background, border-color',
+        willChange: 'transform, background, border-color',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = 'var(--card-hover-bg)';
@@ -231,7 +231,7 @@ export function AdminButtonRow({ button }: AdminButtonRowProps) {
             borderRadius: '8px',
             border: '1.5px solid transparent',
             transition: 'all 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-            will-change: 'color, border-color, background',
+            willChange: 'color, border-color, background',
             cursor: 'pointer',
           }}
           onMouseEnter={(e) => {
@@ -259,7 +259,7 @@ export function AdminButtonRow({ button }: AdminButtonRowProps) {
               borderRadius: '8px',
               border: '1.5px solid transparent',
               transition: 'all 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-              will-change: 'color, border-color, background',
+              willChange: 'color, border-color, background',
               cursor: 'pointer',
             }}
             onMouseEnter={(e) => {

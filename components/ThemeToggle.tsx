@@ -29,7 +29,7 @@ export function ThemeToggle() {
         justifyContent: 'center',
         cursor: 'pointer',
         transition: 'all 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        will: 'transform, background, border-color',
+        willChange: 'transform, background, border-color',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = 'var(--card-hover-bg)';

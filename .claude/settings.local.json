@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npm run:*)",
       "Bash(git --version)",
-      "Bash(rtk git:*)"
+      "Bash(rtk git:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)"
     ]
   }
 }
