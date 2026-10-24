@@ -3,6 +3,15 @@
 import { prisma } from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { timingSafeEqual } from 'crypto';
+
+function setupTokenMatches(provided: string): boolean {
+  const expected = process.env.SETUP_TOKEN;
+  if (!expected) return true; // No token configured: first visitor can set up.
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 /**
  * Save the initial admin password.
@@ -11,6 +20,11 @@ import { redirect } from 'next/navigation';
 export async function setupAdmin(formData: FormData) {
   const password = formData.get('password') as string;
   const confirm = formData.get('confirm') as string;
+  const token = (formData.get('setupToken') as string) || '';
+
+  if (!setupTokenMatches(token)) {
+    throw new Error("Jeton d'installation invalide.");
+  }
 
   if (!password || password !== confirm) {
     throw new Error('Les mots de passe ne correspondent pas.');

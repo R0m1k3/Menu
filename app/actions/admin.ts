@@ -2,15 +2,36 @@
 
 import { prisma } from '@/lib/db';
 import { verifyPassword } from '@/lib/auth';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import {
+  SESSION_COOKIE,
+  SESSION_MAX_AGE,
+  createSessionToken,
+  verifySessionToken,
+  isRateLimited,
+  recordFailedAttempt,
+  clearFailedAttempts,
+} from '@/lib/session';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 /**
  * Handle admin login.
  */
+async function clientKey(): Promise<string> {
+  const h = await headers();
+  // Behind the reverse proxy, the last X-Forwarded-For entry is the one it added.
+  const forwarded = h.get('x-forwarded-for')?.split(',').pop()?.trim();
+  return forwarded || h.get('x-real-ip') || 'unknown';
+}
+
 export async function loginAdmin(formData: FormData) {
   const password = formData.get('password') as string;
+
+  const key = await clientKey();
+  if (isRateLimited(key)) {
+    throw new Error('Trop de tentatives. Réessayez dans quelques minutes.');
+  }
 
   const config = await prisma.config.findUnique({
     where: { id: 'admin_password' },
@@ -20,18 +41,21 @@ export async function loginAdmin(formData: FormData) {
     redirect('/setup');
   }
 
-  const isValid = await verifyPassword(password, config.value);
+  const isValid = !!password && (await verifyPassword(password, config.value));
 
   if (isValid) {
+    clearFailedAttempts(key);
     const cookieStore = await cookies();
-    cookieStore.set('admin_auth', 'true', {
+    cookieStore.set(SESSION_COOKIE, await createSessionToken(), {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24,
+      secure: process.env.NODE_ENV === 'production' && process.env.COOKIE_SECURE !== 'false',
+      sameSite: 'lax',
+      maxAge: SESSION_MAX_AGE,
       path: '/',
     });
     redirect('/admin');
   } else {
+    recordFailedAttempt(key);
     throw new Error('Mot de passe incorrect.');
   }
 }
@@ -41,7 +65,7 @@ export async function loginAdmin(formData: FormData) {
  */
 export async function logoutAdmin() {
   const cookieStore = await cookies();
-  cookieStore.delete('admin_auth');
+  cookieStore.delete(SESSION_COOKIE);
   redirect('/');
 }
 
@@ -50,7 +74,7 @@ export async function logoutAdmin() {
  */
 export async function isAuthenticated() {
   const cookieStore = await cookies();
-  return cookieStore.has('admin_auth');
+  return verifySessionToken(cookieStore.get(SESSION_COOKIE)?.value);
 }
 
 /**

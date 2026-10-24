@@ -34,3 +34,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Sécurité / variables
+
+- `SESSION_SECRET` (optionnel, ≥ 32 caractères) : clé HMAC des cookies de session admin. Sans elle, un secret aléatoire est généré au premier démarrage et conservé dans la base (`Config.session_secret`).
+- `SETUP_TOKEN` (recommandé) : si défini, la page `/setup` exige ce jeton pour créer le mot de passe administrateur initial.
+- `COOKIE_SECURE` : en production le cookie de session est `Secure` ; mettre `false` seulement si l'app est servie sans HTTPS.
+- La connexion admin est limitée à 5 échecs par IP sur 15 minutes.

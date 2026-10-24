@@ -72,6 +72,12 @@ export default function SetupPage() {
               </label>
               <input name="confirm" type="password" required placeholder="••••••••" style={{ background: 'var(--card-bg)', color: 'var(--fg)' }} />
             </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--fg-secondary)', marginBottom: '0.5rem' }}>
+                Jeton d&apos;installation (si SETUP_TOKEN est défini)
+              </label>
+              <input name="setupToken" type="password" autoComplete="off" placeholder="Optionnel" style={{ background: 'var(--card-bg)', color: 'var(--fg)' }} />
+            </div>
 
             {error && (
               <p style={{ color: 'var(--error)', fontSize: '0.85rem', textAlign: 'center', background: 'var(--card-hover-bg)', padding: '0.6rem', borderRadius: '8px' }}>
